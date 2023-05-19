@@ -71,4 +71,7 @@ dependencies {
 
     //material icons
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
+
+    //reflection
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.6.10"
 }

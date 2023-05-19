@@ -3,4 +3,7 @@
     <string name="postsScreenTitle">Posts</string>
     <string name="profileScreenTitle">Profile</string>
     <string name="searchScreenTitle">Search</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="login_as_guest">Login as guest</string>
 </resources>
