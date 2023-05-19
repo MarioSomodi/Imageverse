@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Imageverse</string>
+    <string name="postsScreenTitle">Posts</string>
+    <string name="profileScreenTitle">Profile</string>
+    <string name="searchScreenTitle">Search</string>
 </resources>
