@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,7 +21,7 @@ fun BottomBar(navController: NavHostController, role: Roles){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    BottomNavigation {
+    BottomNavigation (backgroundColor = MaterialTheme.colors.primary) {
         BottomNavScreen::class.sealedSubclasses.forEach{
             if(it.objectInstance!!.roles.contains(role)){
                 AddItem(

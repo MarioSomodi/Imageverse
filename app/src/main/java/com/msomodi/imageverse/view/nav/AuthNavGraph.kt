@@ -5,9 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.msomodi.imageverse.view.AuthScreen
-import com.msomodi.imageverse.view.auth.AuthenticationScreen
+import com.msomodi.imageverse.view.auth.LoginScreen
+import com.msomodi.imageverse.view.auth.RegisterScreen
+import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
 
-fun NavGraphBuilder.authNavGraph(navController: NavHostController){
+fun NavGraphBuilder.authNavGraph(
+    navController: NavHostController,
+    authenticationViewModel: AuthenticationViewModel
+){
     val guestLogin : () -> Unit = {
         navController.popBackStack()
         navController.navigate(Graph.GUEST)
@@ -17,8 +22,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController){
         startDestination = AuthScreen.Login.route
     ){
         composable(route = AuthScreen.Login.route) {
-            AuthenticationScreen(
-                icon = 0,
+            LoginScreen(
                 onLogin = {
                     navController.popBackStack()
                     navController.navigate(Graph.USER)
@@ -27,12 +31,14 @@ fun NavGraphBuilder.authNavGraph(navController: NavHostController){
                     navController.popBackStack()
                     navController.navigate(AuthScreen.Register.route)
                 },
-                onGuestLogin = guestLogin
+                onGuestLogin = guestLogin,
+                authenticationState = authenticationViewModel.authenticationState.value,
+                onEmailChanged = { authenticationViewModel.onEmailChanged(it) },
+                onPasswordChanged = { authenticationViewModel.onPasswordChanged(it) }
             )
         }
         composable(route = AuthScreen.Register.route) {
-            AuthenticationScreen(
-                icon = 0,
+            RegisterScreen(
                 onLogin = {
                     navController.popBackStack()
                     navController.navigate(AuthScreen.Login.route)

@@ -8,15 +8,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.msomodi.imageverse.R
 
 @Composable
-fun AuthenticationScreen(
+fun RegisterScreen(
     modifier : Modifier = Modifier,
-    icon : Int,
     onLogin : () -> Unit,
     onRegister : () -> Unit,
     onGuestLogin : () -> Unit,
@@ -27,19 +25,22 @@ fun AuthenticationScreen(
         verticalArrangement = Arrangement.Center)
     {
         Text(
-            text = "Auth",
+            text = "Register",
             textAlign = TextAlign.Center
         )
+
         Button(
-                content = { Text(text = stringResource(R.string.login))},
-                onClick = onLogin
-            )
-        Button(
-            content = { Text(text = stringResource(R.string.register))},
-            onClick = onRegister
+                content = { Text(text = stringResource(R.string.register)) },
+        onClick = onRegister
         )
+
         Button(
-            content = { Text(text = stringResource(R.string.login_as_guest))},
+            content = { Text(text = stringResource(R.string.login)) },
+            onClick = onLogin
+        )
+
+        Button(
+            content = { Text(text = stringResource(R.string.login_as_guest)) },
             onClick = onGuestLogin
         )
     }

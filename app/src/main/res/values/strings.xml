@@ -6,4 +6,6 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="login_as_guest">Login as guest</string>
+    <string name="email_address">Email address</string>
+    <string name="password">Password</string>
 </resources>
