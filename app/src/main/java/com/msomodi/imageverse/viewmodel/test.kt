@@ -26,11 +26,11 @@ class test @Inject constructor(
     }
 
     init {
-        viewModelScope.launch (errorHandler){
-            _testState.value = _testState.value.copy(
-                AuthenticationResponse = repository.postLogin(),
-                loading = false
-            )
-        }
+//        viewModelScope.launch (errorHandler){
+//            _testState.value = _testState.value.copy(
+//                AuthenticationResponse = repository.postLogin(),
+//                loading = false
+//            )
+//        }
     }
 }

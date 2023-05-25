@@ -1,5 +1,6 @@
 package com.msomodi.imageverse.view.nav
 
+import android.content.Context
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -11,7 +12,8 @@ import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
-    authenticationViewModel: AuthenticationViewModel
+    authenticationViewModel: AuthenticationViewModel,
+    context : Context
 ){
     val guestLogin : () -> Unit = {
         navController.popBackStack()
@@ -24,8 +26,16 @@ fun NavGraphBuilder.authNavGraph(
         composable(route = AuthScreen.Login.route) {
             LoginScreen(
                 onLogin = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.USER)
+                          authenticationViewModel.logIn(
+                              onSuccess = {
+                                  navController.popBackStack()
+                                  navController.navigate(Graph.USER)
+                              },
+                              onSuccessHigherPrivileges = {
+                                  navController.popBackStack()
+                                  navController.navigate(Graph.ADMIN)
+                              },
+                          )
                 },
                 onRegister = {
                     navController.popBackStack()
@@ -33,8 +43,10 @@ fun NavGraphBuilder.authNavGraph(
                 },
                 onGuestLogin = guestLogin,
                 authenticationState = authenticationViewModel.authenticationState.value,
+                authenticationRequestState = authenticationViewModel.authenticationRequestState,
                 onEmailChanged = { authenticationViewModel.onEmailChanged(it) },
-                onPasswordChanged = { authenticationViewModel.onPasswordChanged(it) }
+                onPasswordChanged = { authenticationViewModel.onPasswordChanged(it) },
+                context = context
             )
         }
         composable(route = AuthScreen.Register.route) {

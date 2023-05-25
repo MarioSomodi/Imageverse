@@ -8,4 +8,6 @@
     <string name="login_as_guest">Login as guest</string>
     <string name="email_address">Email address</string>
     <string name="password">Password</string>
+    <string name="unable_to_login">Unable to login</string>
+    <string name="users">Users</string>
 </resources>

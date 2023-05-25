@@ -7,5 +7,5 @@ import retrofit2.http.POST
 
 interface ImageverseApi {
     @POST("/Authentication/Login")
-    suspend fun postLogin(@Body loginRequest : LoginRequest) : AuthenticationResponse
+    suspend fun postLogin(@Body loginRequest : LoginRequest) : Result<AuthenticationResponse>
 }

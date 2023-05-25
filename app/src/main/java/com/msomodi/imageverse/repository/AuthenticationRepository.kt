@@ -13,24 +13,10 @@ class AuthenticationRepository @Inject constructor(
     suspend fun postLogin(
         email : String,
         password : String,
-        onSuccess : () -> Unit,
-        onFail : () -> Unit,
-        onSuccessHigherPrivileges : () -> Unit,
-    ) : AuthenticationResponse {
-        try {
-            val authenticationResult : AuthenticationResponse =  withContext(Dispatchers.IO){
-                imageverseApi.postLogin(LoginRequest(email, password))
-            }
-            if(authenticationResult.user == null) onFail()
-            if(authenticationResult.user!!.isAdmin){
-                onSuccessHigherPrivileges()
-            }else{
-                onSuccess()
-            }
-            return authenticationResult;
-        }catch (e : Exception){
-            onFail()
+    ) : Result<AuthenticationResponse> {
+        val result =  withContext(Dispatchers.IO){
+            imageverseApi.postLogin(LoginRequest(email, password))
         }
-        return AuthenticationResponse(null, null);
+        return result;
     }
 }

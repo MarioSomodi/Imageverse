@@ -2,6 +2,7 @@ package com.msomodi.imageverse.view
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Article
+import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.msomodi.imageverse.R
@@ -30,5 +31,11 @@ sealed class BottomNavScreen(
         title = R.string.searchScreenTitle,
         icon = Icons.Default.Article,
         roles = listOf(Roles.ADMIN, Roles.USER)
+    )
+    object Users: BottomNavScreen(
+        route = "users",
+        title = R.string.users,
+        icon = Icons.Default.People,
+        roles = listOf(Roles.ADMIN)
     )
 }

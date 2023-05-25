@@ -2,6 +2,7 @@ package com.msomodi.imageverse.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.msomodi.imageverse.api.ImageverseApi
+import com.msomodi.imageverse.exception.ResultCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -60,6 +61,7 @@ object NetworkModule {
             .baseUrl(IMAGEVERSE_API_URL)
             .client(okHttpClient)
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .addCallAdapterFactory(ResultCallAdapterFactory())
             .build()
             .create(ImageverseApi::class.java)
     }
