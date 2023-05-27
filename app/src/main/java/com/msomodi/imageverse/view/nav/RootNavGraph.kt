@@ -1,33 +1,49 @@
 package com.msomodi.imageverse.view.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.msomodi.imageverse.model.auth.response.AuthenticationResponse
 import com.msomodi.imageverse.view.AdminScreen
 import com.msomodi.imageverse.view.GuestScreen
 import com.msomodi.imageverse.view.UserScreen
+import com.msomodi.imageverse.view.common.getOrAwaitValue
 import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
 
 @Composable
 fun RootNavGraph(navController: NavHostController){
     val authenticationViewModel = viewModel<AuthenticationViewModel>()
     val context = LocalContext.current;
-    NavHost(
-        navController = navController,
-        startDestination = Graph.AUTH ,
-        route = Graph.ROOT ){
-        authNavGraph(navController, authenticationViewModel, context)
-        composable(route = Graph.ADMIN){
-            AdminScreen()
+    var startDestination = Graph.AUTH;
+
+    authenticationViewModel.getAuthenticatedUser();
+    val authResult = authenticationViewModel.authenticatedUser.observeAsState(initial = null).value
+
+    if(authResult != null){
+        if(authResult.authenticatedUserId != -1 && authResult.user!!.isAdmin)
+        {
+            startDestination = Graph.ADMIN
+        }else if(authResult.authenticatedUserId != -1){
+            startDestination = Graph.USER
         }
-        composable(route = Graph.USER){
-            UserScreen()
-        }
-        composable(route = Graph.GUEST){
-            GuestScreen()
+        NavHost(
+            navController = navController,
+            startDestination = startDestination,
+            route = Graph.ROOT ){
+            authNavGraph(navController, authenticationViewModel, context)
+            composable(route = Graph.ADMIN){
+                AdminScreen()
+            }
+            composable(route = Graph.USER){
+                UserScreen()
+            }
+            composable(route = Graph.GUEST){
+                GuestScreen()
+            }
         }
     }
 }

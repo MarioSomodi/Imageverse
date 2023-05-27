@@ -39,7 +39,7 @@ class ResultCall<T> (
 
                 override fun onFailure(call: Call<T>, t: Throwable) {
                     val errorMessage = when (t){
-                        is IOException -> "No internet connection"
+                        is IOException -> "No internet connection or the server is down"
                         is HttpException -> "Unknown error occurred"
                         else -> t.localizedMessage
                     }

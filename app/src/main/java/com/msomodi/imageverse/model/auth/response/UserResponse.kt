@@ -20,10 +20,8 @@ data class UserResponse (
     val userActionLogIds : Collection<String>,
     val userLimitIds : Collection<String>,
     val userStatistics : UserStatisticsResponse,
-    @Serializable(LocalDateTimeAsStringSerializer::class)
-    val packageValidFrom : LocalDateTime,
+    val packageValidFrom : String  ,
     val previousPackageId : String,
     val refreshToken : String,
-    @Serializable(LocalDateTimeAsStringSerializer::class)
-    val refreshTokenExpiry : LocalDateTime
+    val refreshTokenExpiry : String
 )

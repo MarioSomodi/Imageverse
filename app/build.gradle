@@ -21,6 +21,12 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
@@ -29,6 +35,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
@@ -97,4 +104,13 @@ dependencies {
 
     //DateTime
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+
+    //room
+    implementation "androidx.room:room-runtime:2.5.1"
+    kapt "androidx.room:room-compiler:2.5.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    implementation "androidx.room:room-paging:2.5.1"
+
+    //paging3
+    implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
 }

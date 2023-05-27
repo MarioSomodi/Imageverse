@@ -11,10 +11,8 @@ data class UserStatisticsResponse(
     val totalMbUploaded : Int,
     val totalImagesUploaded : Int,
     val totalTimesUserRequestedPackageChange : Int,
-    @Serializable(LocalDateTimeAsStringSerializer::class)
-    val firstLogin : LocalDateTime,
-    @Serializable(LocalDateTimeAsStringSerializer::class)
-    val lastLogin : LocalDateTime,
+    val firstLogin : String,
+    val lastLogin : String,
     val totalTimesLoggedIn : Int,
     val totalTimesPostsWereEdited : Int
 )

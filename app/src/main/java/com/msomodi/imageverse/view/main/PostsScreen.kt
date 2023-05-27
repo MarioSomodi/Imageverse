@@ -17,23 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun PostsScreen(modifier: Modifier = Modifier, testState: TestState){
+fun PostsScreen(modifier: Modifier = Modifier){
     val state = remember {
         MutableTransitionState(false).apply { 
             targetState = true
         }
-    }
-
-    if (testState.loading) {
-        Box(
-            modifier = modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        val authResponse = testState.AuthenticationResponse;
-        authResponse.user?.let { Text(text = it.userStatistics.firstLogin.toString(), style = typography.h1) }
     }
     
     AnimatedVisibility(
