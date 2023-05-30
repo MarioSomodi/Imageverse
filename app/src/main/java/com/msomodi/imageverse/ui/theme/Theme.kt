@@ -8,31 +8,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColors(
-    primary = red700,
-    primaryVariant = red1000,
-    secondary = lightGrey,
-    background = Color.Black,
-    surface = Color.Black,
+    primary = primary,
     onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.White,
-    onSurface = Color.White
+    secondary = secondary,
+//    primaryVariant = darkPurple,
+//    secondaryVariant = darkRed
 )
 
 private val LightColorPalette = lightColors(
-    primary = red700,
-    primaryVariant = red1000,
-    secondary = lightGrey,
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black
+    primary = primary,
+    secondary = secondary,
+//    primaryVariant = darkPurple,
+//    secondaryVariant = darkRed
 )
 
 @Composable
-fun ImageverseTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+fun ImageverseTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
     val colors = if (darkTheme) {
         DarkColorPalette
     } else {

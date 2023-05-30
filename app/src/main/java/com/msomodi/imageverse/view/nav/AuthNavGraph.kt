@@ -8,25 +8,47 @@ import androidx.navigation.navigation
 import com.msomodi.imageverse.view.AuthScreen
 import com.msomodi.imageverse.view.auth.LoginScreen
 import com.msomodi.imageverse.view.auth.RegisterScreen
-import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
+import com.msomodi.imageverse.view.auth.WelcomeScreen
+import com.msomodi.imageverse.viewmodel.LoginViewModel
+import com.msomodi.imageverse.viewmodel.RegisterViewModel
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
-    authenticationViewModel: AuthenticationViewModel,
+    loginViewModel: LoginViewModel,
+    registerViewModel: RegisterViewModel,
     context : Context
 ){
-    val guestLogin : () -> Unit = {
-        navController.popBackStack()
-        navController.navigate(Graph.GUEST)
+    val onRegister : () -> Unit = {
+        navController.navigate(AuthScreen.Register.route)
     }
+
+    val onLogin : () -> Unit = {
+        navController.navigate(AuthScreen.Login.route)
+    }
+
+    val onNavigateToWelcomeScreen : () -> Unit = {
+        navController.popBackStack()
+        navController.navigate(AuthScreen.Welcome.route)
+    }
+
     navigation(
         route = Graph.AUTH,
-        startDestination = AuthScreen.Login.route
+        startDestination = AuthScreen.Welcome.route
     ){
+        composable(route = AuthScreen.Welcome.route){
+            WelcomeScreen(
+                onRegister = onRegister,
+                onLogin = onLogin,
+                onGuestLogin = {
+                    navController.popBackStack()
+                    navController.navigate(Graph.GUEST)
+                }
+            )
+        }
         composable(route = AuthScreen.Login.route) {
             LoginScreen(
                 onLogin = {
-                          authenticationViewModel.logIn(
+                          loginViewModel.logIn(
                               onSuccess = {
                                   navController.popBackStack()
                                   navController.navigate(Graph.USER)
@@ -37,29 +59,26 @@ fun NavGraphBuilder.authNavGraph(
                               },
                           )
                 },
-                onRegister = {
-                    navController.popBackStack()
-                    navController.navigate(AuthScreen.Register.route)
-                },
-                onGuestLogin = guestLogin,
-                authenticationState = authenticationViewModel.authenticationState.value,
-                authenticationRequestState = authenticationViewModel.authenticationRequestState,
-                onEmailChanged = { authenticationViewModel.onEmailChanged(it) },
-                onPasswordChanged = { authenticationViewModel.onPasswordChanged(it) },
-                context = context
+                loginState = loginViewModel.loginState.value,
+                authenticationRequestState = loginViewModel.loginRequestState,
+                onEmailChanged = { loginViewModel.onEmailChanged(it) },
+                onPasswordChanged = { loginViewModel.onPasswordChanged(it) },
+                context = context,
+                onRegister = onRegister
             )
         }
         composable(route = AuthScreen.Register.route) {
             RegisterScreen(
-                onLogin = {
-                    navController.popBackStack()
-                    navController.navigate(AuthScreen.Login.route)
-                },
-                onRegister = {
-                    navController.popBackStack()
-                    navController.navigate(Graph.USER)
-                },
-                onGuestLogin = guestLogin
+                registerState = registerViewModel.registerState.value,
+                onLogin = onLogin,
+                onRegister = {},
+                onEmailChanged = { registerViewModel.onEmailChanged(it) },
+                onPasswordChanged = { registerViewModel.onPasswordChanged(it) },
+                onNameChanged = { registerViewModel.onNameChanged(it) },
+                onSurnameChanged = { registerViewModel.onSurnameChanged(it) },
+                onUsernameChanged = { registerViewModel.onUsernameChanged(it) },
+                onPackageIdChanged = { registerViewModel.onPackageIdChange(it) },
+                onNavigateToWelcomeScreen = onNavigateToWelcomeScreen
             )
         }
     }
