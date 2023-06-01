@@ -33,4 +33,7 @@
     <string name="previous">Previous</string>
     <string name="a_month">A MONTH</string>
     <string name="choose_this_package">Choose this package</string>
+    <string name="loading_packages">Loading packages...</string>
+    <string name="internet_connection_error_or_server_connection_error_occurred">Internet or server connection error occurred</string>
+    <string name="try_again">Try again</string>
 </resources>

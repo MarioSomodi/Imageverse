@@ -31,6 +31,16 @@ fun NavGraphBuilder.authNavGraph(
         navController.navigate(AuthScreen.Welcome.route)
     }
 
+    val onSuccess : () -> Unit = {
+        navController.popBackStack()
+        navController.navigate(Graph.USER)
+    }
+
+    val onSuccessHigherPrivileges : () -> Unit = {
+        navController.popBackStack()
+        navController.navigate(Graph.ADMIN)
+    }
+
     navigation(
         route = Graph.AUTH,
         startDestination = AuthScreen.Welcome.route
@@ -49,14 +59,8 @@ fun NavGraphBuilder.authNavGraph(
             LoginScreen(
                 onLogin = {
                           loginViewModel.logIn(
-                              onSuccess = {
-                                  navController.popBackStack()
-                                  navController.navigate(Graph.USER)
-                              },
-                              onSuccessHigherPrivileges = {
-                                  navController.popBackStack()
-                                  navController.navigate(Graph.ADMIN)
-                              },
+                              onSuccess = onSuccess,
+                              onSuccessHigherPrivileges =onSuccessHigherPrivileges
                           )
                 },
                 loginState = loginViewModel.loginState.value,
@@ -69,16 +73,16 @@ fun NavGraphBuilder.authNavGraph(
         }
         composable(route = AuthScreen.Register.route) {
             RegisterScreen(
-                registerState = registerViewModel.registerState.value,
+                registerViewModel = registerViewModel,
                 onLogin = onLogin,
-                onRegister = {},
-                onEmailChanged = { registerViewModel.onEmailChanged(it) },
-                onPasswordChanged = { registerViewModel.onPasswordChanged(it) },
-                onNameChanged = { registerViewModel.onNameChanged(it) },
-                onSurnameChanged = { registerViewModel.onSurnameChanged(it) },
-                onUsernameChanged = { registerViewModel.onUsernameChanged(it) },
-                onPackageIdChanged = { registerViewModel.onPackageIdChange(it) },
-                onNavigateToWelcomeScreen = onNavigateToWelcomeScreen
+                onRegister = {
+                    registerViewModel.register(
+                        onSuccess = onSuccess,
+                        onSuccessHigherPrivileges =onSuccessHigherPrivileges
+                    )
+                },
+                onNavigateToWelcomeScreen = onNavigateToWelcomeScreen,
+                context = context
             )
         }
     }

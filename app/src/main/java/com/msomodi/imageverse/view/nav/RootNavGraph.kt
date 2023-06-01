@@ -22,9 +22,13 @@ fun RootNavGraph(navController: NavHostController){
     val context = LocalContext.current;
     var startDestination = Graph.AUTH;
 
-    authenticationViewModel.removeAuthenticatedUser();
     authenticationViewModel.getAuthenticatedUser();
     val authResult = authenticationViewModel.authenticatedUser.observeAsState(initial = null).value
+
+    val onLogOut : () -> Unit = {
+        authenticationViewModel.removeAuthenticatedUser();
+    }
+
 
     if(authResult != null){
         if(authResult.authenticatedUserId != -1 && authResult.user!!.isAdmin)
@@ -39,13 +43,16 @@ fun RootNavGraph(navController: NavHostController){
             route = Graph.ROOT ){
             authNavGraph(navController, loginViewModel, registerViewModel, context)
             composable(route = Graph.ADMIN){
-                AdminScreen()
+                AdminScreen(onLogOut = onLogOut)
             }
             composable(route = Graph.USER){
-                UserScreen()
+                UserScreen(onLogOut = onLogOut)
             }
             composable(route = Graph.GUEST){
-                GuestScreen()
+                GuestScreen {
+                    navController.popBackStack()
+                    navController.navigate(Graph.AUTH)
+                }
             }
         }
     }

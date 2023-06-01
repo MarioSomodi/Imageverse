@@ -16,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val _authenticationRepository: AuthenticationRepository,
     ) : ViewModel() {
-    private val _loginState = mutableStateOf(
+    private var _loginState = mutableStateOf(
         LoginState()
     )
     val loginState: State<LoginState>
@@ -55,6 +56,9 @@ class LoginViewModel @Inject constructor(
                 loginState.value.email,
                 loginState.value.password).onSuccess {
                 loginRequestState.emit(RequestState.SUCCESS)
+                _loginState = mutableStateOf(
+                    LoginState()
+                )
                 if(it.user!!.isAdmin){
                     onSuccessHigherPrivileges()
                 }else{

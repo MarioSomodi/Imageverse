@@ -123,7 +123,7 @@ fun PackageCard(
 @Preview(showBackground = true)
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun WelcomeScreenPreview(){
+fun PackageCardPreview(){
     val packageObj = PackageResponse(
         "1",
         "Default",

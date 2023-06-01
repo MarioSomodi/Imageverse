@@ -8,6 +8,13 @@ class ErrorUtils {
     fun parseError(httpException: HttpException): ApiException {
         val gson = Gson()
         val errorBodyJsonString = httpException.response()?.errorBody()!!.string()
+        if(errorBodyJsonString.isBlank()){
+            var message : String = httpException.localizedMessage
+            when(httpException.code()){
+                401 -> message = "You are not authenticated to access this resource"
+            }
+            return ApiException(httpException.code().toString(), message, "Failure")
+        }
         return gson.fromJson(errorBodyJsonString, ApiException::class.java)
     }
 }

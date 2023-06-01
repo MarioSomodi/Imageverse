@@ -1,5 +1,7 @@
 package com.msomodi.imageverse.view.auth
 
+import android.content.Context
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -32,7 +34,10 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -43,41 +48,42 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import com.msomodi.imageverse.R
 import com.msomodi.imageverse.model.auth.response.PackageResponse
-import com.msomodi.imageverse.ui.theme.ImageverseTheme
 import com.msomodi.imageverse.util.noRippleClickable
 import com.msomodi.imageverse.view.common.PackageCard
+import com.msomodi.imageverse.view.common.RequestState
 import com.msomodi.imageverse.view.common.StepsProgressBar
+import com.msomodi.imageverse.viewmodel.RegisterViewModel
 
 @Composable
 fun RegisterScreen(
     modifier: Modifier = Modifier,
-    registerState: RegisterState,
     onLogin: () -> Unit,
     onRegister: () -> Unit,
     onNavigateToWelcomeScreen: () -> Unit,
-    onNameChanged: (String) -> Unit,
-    onSurnameChanged: (String) -> Unit,
-    onUsernameChanged: (String) -> Unit,
-    onPasswordChanged: (String) -> Unit,
-    onEmailChanged: (String) -> Unit,
-    onPackageIdChanged: (String) -> Unit,
+    registerViewModel: RegisterViewModel,
+    context : Context
 ){
     val focusManager = LocalFocusManager.current
 
-    val loadingState by rememberSaveable{
+    var loadingState by rememberSaveable{
         mutableStateOf(false)
     }
+
+    val registerState : RegisterState = registerViewModel.registerState.value
+
+    val state by registerViewModel.registerRequestState.collectAsState()
 
     val allConditionsForCompletionValid =
             registerState.isEmailValid &&
@@ -90,6 +96,26 @@ fun RegisterScreen(
     var currentStep by remember { mutableStateOf(0) }
     val numberOfSteps = 2
     val stepLabels : Collection<String> = listOf("Personal details", "Authentication details", "Package choice")
+
+    state.let { state ->
+        when(state){
+            RequestState.LOADING -> {
+                focusManager.clearFocus()
+                loadingState = true
+            }
+            is RequestState.FAILURE -> {
+                loadingState = false;
+                val message = state.message
+                LaunchedEffect(key1 = message) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            RequestState.SUCCESS -> {
+                loadingState = false
+            }
+            else -> {}
+        }
+    }
 
     BackHandler(enabled = true) {
         if(currentStep != 0){
@@ -172,19 +198,20 @@ fun RegisterScreen(
                         0 ->  PersonalDetailsForm(
                             registerState = registerState,
                             focusManager = focusManager,
-                            onUsernameChanged = onUsernameChanged,
-                            onSurnameChanged = onSurnameChanged,
-                            onNameChanged = onNameChanged
+                            onUsernameChanged = { registerViewModel.onUsernameChanged(it) },
+                            onSurnameChanged = { registerViewModel.onSurnameChanged(it) },
+                            onNameChanged = { registerViewModel.onNameChanged(it) }
                         )
                         1 -> AuthenticationDetailsForm(
                             registerState = registerState,
                             focusManager = focusManager,
-                            onEmailChanged = onEmailChanged,
-                            onPasswordChanged = onPasswordChanged
+                            onEmailChanged = { registerViewModel.onEmailChanged(it) },
+                            onPasswordChanged = { registerViewModel.onPasswordChanged(it) }
                         )
                         2 -> PackageChoice(
-                            registerState = registerState,
-                            onPackageIdChanged = onPackageIdChanged
+                            focusManager = focusManager,
+                            registerViewModel = registerViewModel,
+                            context = context
                         )
                     }
                 }
@@ -231,7 +258,8 @@ fun RegisterScreen(
                                 registerState.isEmailValid &&
                                 registerState.isPasswordValid ||
                                 currentStep == 2 &&
-                                registerState.isPackageIdValid
+                                registerState.isPackageIdValid &&
+                                !loadingState
                     ) {
                         if(currentStep != numberOfSteps){
                             Text(text = stringResource(R.string.next))
@@ -387,47 +415,85 @@ fun AuthenticationDetailsForm(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PackageChoice(
-    registerState: RegisterState,
-    onPackageIdChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    focusManager: FocusManager,
+    context : Context,
+    registerViewModel: RegisterViewModel,
 ){
-    val packageObj = PackageResponse(
-        "1",
-        "Default",
-        9.99.toDouble(),
-        10,
-        10,
-        10
-    )
-    val packageObj2 = PackageResponse(
-        "2",
-        "Default2",
-        9.99.toDouble(),
-        10,
-        10,
-        10
-    )
-    val packageObj3 = PackageResponse(
-        "3",
-        "Default3",
-        9.99.toDouble(),
-        10,
-        10,
-        10
-    )
+    val state by registerViewModel.registerDataCollectionRequestState.collectAsState()
 
-    val packageList : List<PackageResponse> = listOf(packageObj, packageObj2, packageObj3)
+    var loadingState by remember {
+        mutableStateOf(false)
+    }
 
-    val state = rememberLazyListState()
+    var failureOccurred by remember {
+        mutableStateOf(false)
+    }
 
-    LazyRow(
-        modifier = Modifier.fillMaxSize(),
-        verticalAlignment = Alignment.CenterVertically,
-        state = state,
-        flingBehavior = rememberSnapFlingBehavior(lazyListState = state),
-        horizontalArrangement = Arrangement.spacedBy(15.dp)
-    ) {
-        items(packageList){ packageResponse ->
-            PackageCard(packageObj = packageResponse, onSelectPackage = {onPackageIdChanged(it)}, selectedPackageId = registerState.packageId)
+    val packagesState : List<PackageResponse>? = registerViewModel.packages.observeAsState(initial = null).value
+    var packagesList : List<PackageResponse> = listOf()
+    if(packagesState != null){
+        packagesList = packagesState
+    }
+
+    val listState = rememberLazyListState()
+    if(loadingState){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            CircularProgressIndicator()
+            Text(text = stringResource(R.string.loading_packages))
+        }
+    }else if(failureOccurred){
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = modifier.fillMaxSize()
+        ) {
+            Text(text = stringResource(R.string.internet_connection_error_or_server_connection_error_occurred), textAlign = TextAlign.Center)
+            Button(onClick = {registerViewModel.getPackages()}) {
+                Text(text = stringResource(R.string.try_again))
+            }
+        }
+    }
+    else{
+        LazyRow(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically,
+            state = listState,
+            flingBehavior = rememberSnapFlingBehavior(lazyListState = listState),
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            items(packagesList){ packageResponse ->
+                PackageCard(
+                    packageObj = packageResponse,
+                    onSelectPackage = {registerViewModel.onPackageIdChange(it)},
+                    selectedPackageId = registerViewModel.registerState.value.packageId)
+            }
+        }
+    }
+
+    state.let { state ->
+        when(state){
+            RequestState.LOADING -> {
+                focusManager.clearFocus()
+                loadingState = true
+            }
+            is RequestState.FAILURE -> {
+                loadingState = false
+                failureOccurred = true
+                val message = state.message
+                LaunchedEffect(key1 = message) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            RequestState.SUCCESS -> {
+                loadingState = false
+                failureOccurred = false
+            }
+            else -> {}
         }
     }
 }
