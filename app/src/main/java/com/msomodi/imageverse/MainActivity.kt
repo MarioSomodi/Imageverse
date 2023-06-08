@@ -3,10 +3,7 @@ package com.msomodi.imageverse
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.msomodi.imageverse.ui.theme.ImageverseTheme
@@ -24,7 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ImageverseTheme {
                 Surface{
-                    RootNavGraph(navController = rememberNavController())
+                    RootNavGraph(navController = rememberNavController(),)
                 }
             }
         }

@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msomodi.imageverse.exception.ErrorUtils
+import com.msomodi.imageverse.model.auth.request.LoginRequest
 import com.msomodi.imageverse.model.exception.ApiException
 import com.msomodi.imageverse.repository.AuthenticationRepository
 import com.msomodi.imageverse.util.isValidPassword
@@ -49,12 +50,29 @@ class LoginViewModel @Inject constructor(
         )
     }
 
+    fun onAuthenticationProviderId(authenticationProviderId: String){
+        _loginState.value = _loginState.value.copy(
+            authenticationProviderId = authenticationProviderId,
+        )
+    }
+
+    fun onAuthenticationType(authenticationType: Int){
+        _loginState.value = _loginState.value.copy(
+            authenticationType = authenticationType,
+        )
+    }
+
     fun logIn(onSuccess: () -> Unit, onSuccessHigherPrivileges: () -> Unit){
         viewModelScope.launch (_errorHandler){
             loginRequestState.emit(RequestState.LOADING)
             _authenticationRepository.postLogin(
-                loginState.value.email,
-                loginState.value.password).onSuccess {
+                LoginRequest(
+                    loginState.value.email,
+                    loginState.value.password,
+                    loginState.value.authenticationProviderId,
+                    loginState.value.authenticationType
+                )
+            ).onSuccess {
                 loginRequestState.emit(RequestState.SUCCESS)
                 _loginState = mutableStateOf(
                     LoginState()

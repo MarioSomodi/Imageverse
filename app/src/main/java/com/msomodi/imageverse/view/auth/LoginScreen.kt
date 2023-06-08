@@ -2,7 +2,7 @@ package com.msomodi.imageverse.view.auth
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.animation.core.MutableTransitionState
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
-import androidx.compose.material.ButtonColors
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
@@ -29,7 +29,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedButton
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
@@ -39,6 +39,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -60,23 +61,108 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.common.api.ApiException
 import com.msomodi.imageverse.R
+import com.msomodi.imageverse.model.auth.google.GoogleUser
+import com.msomodi.imageverse.model.auth.response.PackageResponse
 import com.msomodi.imageverse.util.noRippleClickable
 import com.msomodi.imageverse.view.common.RequestState
+import com.msomodi.imageverse.viewmodel.GoogleSignInViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
 fun LoginScreen(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     loginState: LoginState,
-    authenticationRequestState : MutableStateFlow<RequestState>,
-    onLogin : () -> Unit,
-    onRegister : () -> Unit,
+    authenticationRequestState: MutableStateFlow<RequestState>,
+    onLogin: () -> Unit,
+    onRegister: () -> Unit,
+    onGoogleLogOn: (GoogleUser, Boolean) -> Unit,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
-    context : Context
+    context: Context,
+    googleSignInViewModel: GoogleSignInViewModel
 ){
+    var dialogOpen : Boolean by remember{
+        mutableStateOf(false)
+    }
+    val authResultLauncher =
+        rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
+            try {
+                val gsa = task?.getResult(ApiException::class.java)
+                if (gsa != null) {
+                    dialogOpen = !dialogOpen
+                    googleSignInViewModel.checkIfUserLoggedInBefore(gsa.id!!)
+                    googleSignInViewModel.setGoogleUser(
+                        gsa.id!!,
+                        gsa.givenName,
+                        gsa.familyName,
+                        gsa.email,
+                        if(gsa.photoUrl == null) null else gsa.photoUrl.toString()
+                    )
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(context, e.toString(), Toast.LENGTH_SHORT).show()
+            }
+    }
+
     val focusManager = LocalFocusManager.current
+
+    val userExists : Boolean? = googleSignInViewModel.userExists.observeAsState(initial = null).value
+
+    val googleUser : GoogleUser? = googleSignInViewModel.googleUser.observeAsState(initial = null).value
+
+
+    if(dialogOpen && userExists != null && googleUser != null){
+        AlertDialog(
+            onDismissRequest = {
+                dialogOpen = !dialogOpen
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        dialogOpen = !dialogOpen
+                        onGoogleLogOn(googleUser, userExists)
+                    }
+                ) {
+                    if(userExists){
+                        Text(text = stringResource(R.string.consent))
+                    }else{
+                        Text(text = stringResource(R.string.go_to_register))
+                    }
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        dialogOpen = !dialogOpen
+                    }
+                ) {
+                    Text(text = stringResource(R.string.cancel))
+                }
+            },
+            title = {
+                if(userExists){
+                    Text(text = stringResource(R.string.consent))
+                }else{
+                    Text(text = stringResource(R.string.new_account))
+                }
+            },
+            text = {
+                if(userExists){
+                    Text(text = "Do you allow Imageverse to use data from google to log you in?")
+                }else{
+                    Text(text = stringResource(R.string.first_time_google_signin))
+                }
+
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(32.dp),
+            shape = RoundedCornerShape(5.dp),
+            backgroundColor = MaterialTheme.colors.background
+        )
+    }
 
     var loadingState by rememberSaveable{
         mutableStateOf(false)
@@ -201,7 +287,7 @@ fun LoginScreen(
                         shape = RoundedCornerShape(15.dp),
                         enabled = loginState.isEmailValid && !loadingState,
                     ) {
-                        if(loadingState){
+                        if(loadingState && loginState.authenticationType == 0){
                             CircularProgressIndicator(color = MaterialTheme.colors.primary)
                         }
                         else{
@@ -233,12 +319,19 @@ fun LoginScreen(
                         border = BorderStroke(2.dp, MaterialTheme.colors.primary),
                         modifier = modifier
                             .fillMaxWidth(),
-                        onClick = { },
+                        onClick = {
+                            authResultLauncher.launch(1)
+                        },
                         shape = RoundedCornerShape(15.dp),
                         enabled = !loadingState
 
                     ) {
-                        Text(text = stringResource(R.string.log_in_with_google), fontWeight = FontWeight.SemiBold)
+                        if(loadingState && loginState.authenticationType == 1){
+                            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+                        }
+                        else{
+                            Text(text = stringResource(R.string.log_in_with_google), fontWeight = FontWeight.SemiBold)
+                        }
                     }
                     OutlinedButton(
                         colors = ButtonDefaults.outlinedButtonColors(
@@ -251,23 +344,35 @@ fun LoginScreen(
                         shape = RoundedCornerShape(15.dp),
                         enabled = !loadingState,
                     ) {
-                        Text(text = stringResource(R.string.log_in_with_github), fontWeight = FontWeight.SemiBold)
+                        if(loadingState && loginState.authenticationType == 2){
+                            CircularProgressIndicator(color = MaterialTheme.colors.primary)
+                        }
+                        else{
+                            Text(text = stringResource(R.string.log_in_with_github), fontWeight = FontWeight.SemiBold)
+                        }
                     }
                 }
             }
         }
     }
-    
+
     state.let { state ->
-        if(state is RequestState.LOADING){
-            focusManager.clearFocus()
-            loadingState = true
-        } else if (state is RequestState.FAILURE){
-            loadingState = false;
-            val message = state.message
-            LaunchedEffect(key1 = message) {
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        when(state){
+            RequestState.LOADING -> {
+                focusManager.clearFocus()
+                loadingState = true
             }
+            is RequestState.FAILURE -> {
+                loadingState = false;
+                val message = state.message
+                LaunchedEffect(key1 = message) {
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            }
+            RequestState.SUCCESS -> {
+                loadingState = false
+            }
+            else -> {}
         }
     }
 }

@@ -90,6 +90,28 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
+    fun onGoogleUserRegister(
+        surname: String,
+        name: String,
+        email: String,
+        profileImage: String,
+        authenticationProviderId: String,
+        authenticationType: Int
+    ){
+        _registerState.value = _registerState.value.copy(
+            surname = surname,
+            isSurnameValid = surname.isNotBlank(),
+            name = name,
+            isNameValid = name.isNotBlank(),
+            email = email,
+            isEmailValid = Patterns.EMAIL_ADDRESS.matcher(email).matches(),
+            profileImage = profileImage,
+            authenticationProviderId = authenticationProviderId,
+            authenticationType = authenticationType,
+            isPasswordValid = true,
+        )
+    }
+
     fun onUsernameChanged(username: String){
         _registerState.value = _registerState.value.copy(
             username = username,
@@ -104,6 +126,24 @@ class RegisterViewModel @Inject constructor(
         )
     }
 
+    fun onProfileImageChange(profileImage: String){
+        _registerState.value = _registerState.value.copy(
+            profileImage = profileImage,
+        )
+    }
+
+    fun onAuthenticationProviderId(authenticationProviderId: String){
+        _registerState.value = _registerState.value.copy(
+            authenticationProviderId = authenticationProviderId,
+        )
+    }
+
+    fun onAuthenticationType(authenticationType: Int){
+        _registerState.value = _registerState.value.copy(
+            authenticationType = authenticationType,
+        )
+    }
+
     fun register(onSuccess: () -> Unit, onSuccessHigherPrivileges: () -> Unit){
         viewModelScope.launch (_errorHandler){
             registerRequestState.emit(RequestState.LOADING)
@@ -114,7 +154,10 @@ class RegisterViewModel @Inject constructor(
                     registerState.value.surname,
                     registerState.value.email,
                     registerState.value.password,
-                    registerState.value.packageId
+                    registerState.value.packageId,
+                    registerState.value.profileImage,
+                    registerState.value.authenticationProviderId,
+                    registerState.value.authenticationType
                 )
             ).onSuccess {
                 registerRequestState.emit(RequestState.SUCCESS)

@@ -1,5 +1,6 @@
 package com.msomodi.imageverse.repository
 
+import com.google.android.gms.common.api.BooleanResult
 import com.msomodi.imageverse.api.ImageverseApi
 import com.msomodi.imageverse.db.ImageverseDatabase
 import com.msomodi.imageverse.model.auth.request.LoginRequest
@@ -15,17 +16,25 @@ class AuthenticationRepository @Inject constructor(
     private val _imageverseDatabase: ImageverseDatabase
 ){
     suspend fun postLogin(
-        email : String,
-        password : String,
+        loginRequest: LoginRequest
     ) : Result<AuthenticationResponse> {
         val result =  withContext(Dispatchers.IO){
-            _imageverseApi.postLogin(LoginRequest(email, password))
+            _imageverseApi.postLogin(loginRequest)
         }
         result.onSuccess {
             _imageverseDatabase.authenticatedUsersDao().deleteAuthenticatedUser()
             _imageverseDatabase.authenticatedUsersDao().addAuthenticatedUser(it)
         }
         return result;
+    }
+
+    suspend fun checkIfUserHasAccount(
+        authenticationProviderId : String
+    ) : Boolean {
+        val result =  withContext(Dispatchers.IO){
+            _imageverseApi.getUserExists(authenticationProviderId)
+        }
+        return result.getOrNull()!!.success
     }
 
     suspend fun postRegister(
@@ -45,6 +54,7 @@ class AuthenticationRepository @Inject constructor(
     ) : Flow<AuthenticationResponse?> {
         return _imageverseDatabase.authenticatedUsersDao().getAuthenticatedUser()
     }
+
     suspend fun removeAuthenticatedUser(
     ) {
         _imageverseDatabase.authenticatedUsersDao().deleteAuthenticatedUser()

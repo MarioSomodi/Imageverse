@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
     id 'kotlinx-serialization'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -113,4 +114,7 @@ dependencies {
 
     //paging3
     implementation 'androidx.paging:paging-compose:1.0.0-alpha14'
+
+    //Google play services
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
 }

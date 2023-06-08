@@ -11,6 +11,7 @@ import com.msomodi.imageverse.view.AdminScreen
 import com.msomodi.imageverse.view.GuestScreen
 import com.msomodi.imageverse.view.UserScreen
 import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
+import com.msomodi.imageverse.viewmodel.GoogleSignInViewModel
 import com.msomodi.imageverse.viewmodel.LoginViewModel
 import com.msomodi.imageverse.viewmodel.RegisterViewModel
 
@@ -19,6 +20,7 @@ fun RootNavGraph(navController: NavHostController){
     val authenticationViewModel = viewModel<AuthenticationViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
     val registerViewModel = viewModel<RegisterViewModel>()
+    val googleSignInViewModel = viewModel<GoogleSignInViewModel>()
     val context = LocalContext.current;
     var startDestination = Graph.AUTH;
 
@@ -41,7 +43,7 @@ fun RootNavGraph(navController: NavHostController){
             navController = navController,
             startDestination = startDestination,
             route = Graph.ROOT ){
-            authNavGraph(navController, loginViewModel, registerViewModel, context)
+            authNavGraph(navController, loginViewModel, registerViewModel, context, googleSignInViewModel)
             composable(route = Graph.ADMIN){
                 AdminScreen(onLogOut = onLogOut)
             }

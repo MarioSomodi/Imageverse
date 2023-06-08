@@ -9,5 +9,8 @@ data class RegisterRequest(
     val surname : String,
     val email : String,
     val password : String,
-    val packageId : String
+    val packageId : String,
+    val profileImage : String?,
+    val authenticationProviderId : String?,
+    val AuthenticationType : Int
 )

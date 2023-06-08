@@ -359,6 +359,7 @@ fun AuthenticationDetailsForm(
     var passwordVisible by rememberSaveable{
         mutableStateOf(false)
     }
+
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
         value = registerState.email,
@@ -379,37 +380,40 @@ fun AuthenticationDetailsForm(
             )
         }
     )
-    OutlinedTextField(
-        modifier = modifier.fillMaxWidth(),
-        value = registerState.password,
-        onValueChange = onPasswordChanged,
-        label = { Text(text = stringResource(R.string.password))},
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Password,
-            imeAction = ImeAction.Done
-        ),
-        keyboardActions = KeyboardActions(
-            onDone = { focusManager.clearFocus() }
-        ),
-        isError = !registerState.isPasswordValid,
-        leadingIcon = {
-            Icon(
-                imageVector = Icons.Outlined.Lock,
-                contentDescription = stringResource(R.string.lock_icon)
-            )
-        },
-        trailingIcon = {
-            IconButton(onClick = {
-                passwordVisible = !passwordVisible
-            }){
+
+    if(registerState.authenticationType == 0){
+        OutlinedTextField(
+            modifier = modifier.fillMaxWidth(),
+            value = registerState.password,
+            onValueChange = onPasswordChanged,
+            label = { Text(text = stringResource(R.string.password))},
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = { focusManager.clearFocus() }
+            ),
+            isError = !registerState.isPasswordValid,
+            leadingIcon = {
                 Icon(
-                    imageVector = if(passwordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
-                    contentDescription = stringResource(R.string.password_visibility_icon)
+                    imageVector = Icons.Outlined.Lock,
+                    contentDescription = stringResource(R.string.lock_icon)
                 )
-            }
-        },
-        visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
-    )
+            },
+            trailingIcon = {
+                IconButton(onClick = {
+                    passwordVisible = !passwordVisible
+                }){
+                    Icon(
+                        imageVector = if(passwordVisible) Icons.Outlined.VisibilityOff else Icons.Outlined.Visibility,
+                        contentDescription = stringResource(R.string.password_visibility_icon)
+                    )
+                }
+            },
+            visualTransformation = if(passwordVisible) VisualTransformation.None else PasswordVisualTransformation()
+        )
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

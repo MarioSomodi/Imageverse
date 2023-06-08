@@ -36,4 +36,9 @@
     <string name="loading_packages">Loading packages...</string>
     <string name="internet_connection_error_or_server_connection_error_occurred">Internet or server connection error occurred</string>
     <string name="try_again">Try again</string>
+    <string name="cancel">Cancel</string>
+    <string name="go_to_register">Register</string>
+    <string name="first_time_google_signin">Upon your first login, selecting the "Register" option allows us to gather and present your information from Google. This enables you to review and rectify any missing or incorrect details. Additionally, you\'ll need to select a desired package. Once you have reviewed everything, you can proceed to confirm your registration.</string>
+    <string name="consent">Consent</string>
+    <string name="new_account">New account</string>
 </resources>
