@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.viewmodel
+package com.msomodi.imageverse.viewmodel.auth
 
 import android.util.Log
 import android.util.Patterns
@@ -10,14 +10,12 @@ import com.msomodi.imageverse.exception.ErrorUtils
 import com.msomodi.imageverse.model.auth.request.LoginRequest
 import com.msomodi.imageverse.model.exception.ApiException
 import com.msomodi.imageverse.repository.AuthenticationRepository
-import com.msomodi.imageverse.util.isValidPassword
 import com.msomodi.imageverse.view.auth.LoginState
-import com.msomodi.imageverse.view.common.RequestState
+import com.msomodi.imageverse.model.common.RequestState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 import retrofit2.HttpException
 import javax.inject.Inject
 

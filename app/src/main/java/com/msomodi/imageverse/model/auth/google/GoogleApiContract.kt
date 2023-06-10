@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.view.auth
+package com.msomodi.imageverse.model.auth.google
 
 import android.app.Activity
 import android.content.Context

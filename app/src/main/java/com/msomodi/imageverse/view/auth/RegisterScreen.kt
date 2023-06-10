@@ -57,14 +57,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.LiveData
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.PackageResponse
+import com.msomodi.imageverse.model.packages.response.PackageResponse
 import com.msomodi.imageverse.util.noRippleClickable
 import com.msomodi.imageverse.view.common.PackageCard
-import com.msomodi.imageverse.view.common.RequestState
+import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.view.common.StepsProgressBar
-import com.msomodi.imageverse.viewmodel.RegisterViewModel
+import com.msomodi.imageverse.viewmodel.auth.RegisterViewModel
 
 @Composable
 fun RegisterScreen(

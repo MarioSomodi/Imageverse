@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.view.auth
+package com.msomodi.imageverse.model.common
 
 enum class Roles {
     USER,

@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.view.common
+package com.msomodi.imageverse.model.common
 
 sealed class RequestState {
     object START : RequestState()

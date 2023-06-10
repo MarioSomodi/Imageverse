@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.view.nav
+package com.msomodi.imageverse.view.common
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.BottomNavigation
@@ -14,7 +14,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.msomodi.imageverse.view.BottomNavScreen
-import com.msomodi.imageverse.view.auth.Roles
+import com.msomodi.imageverse.model.common.Roles
 
 @Composable
 fun BottomBar(navController: NavHostController, role: Roles){

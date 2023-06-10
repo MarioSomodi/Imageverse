@@ -1,6 +1,5 @@
 package com.msomodi.imageverse.repository
 
-import com.google.android.gms.common.api.BooleanResult
 import com.msomodi.imageverse.api.ImageverseApi
 import com.msomodi.imageverse.db.ImageverseDatabase
 import com.msomodi.imageverse.model.auth.request.LoginRequest

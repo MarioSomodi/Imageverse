@@ -1,11 +1,10 @@
-package com.msomodi.imageverse.viewmodel
+package com.msomodi.imageverse.viewmodel.auth
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msomodi.imageverse.model.auth.google.GoogleUser
-import com.msomodi.imageverse.model.auth.response.PackageResponse
 import com.msomodi.imageverse.repository.AuthenticationRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

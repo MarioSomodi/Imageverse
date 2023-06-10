@@ -1,25 +1,30 @@
 package com.msomodi.imageverse.view
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.msomodi.imageverse.view.auth.Roles
-import com.msomodi.imageverse.view.nav.BottomBar
-import com.msomodi.imageverse.view.nav.TopBar
+import com.msomodi.imageverse.model.auth.response.AuthenticationResponse
+import com.msomodi.imageverse.model.common.Roles
+import com.msomodi.imageverse.view.common.BottomBar
+import com.msomodi.imageverse.view.common.TopBar
 import com.msomodi.imageverse.view.nav.UserBottomNavGraph
 
 @Composable
 fun UserScreen (
     modifier: Modifier = Modifier,
-    onLogOut: () -> Unit
+    onLogOut: () -> Unit,
+    authResult: AuthenticationResponse,
 ) {
     val navController = rememberNavController()
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val navigateToProfile : () -> Unit = {
+        navController.navigate(BottomNavScreen.Profile.route)
+    }
 
     Scaffold(
         bottomBar = {
@@ -29,13 +34,19 @@ fun UserScreen (
             )
         },
         topBar = {
-            TopBar(onLogOut)
+            TopBar(
+                onLogOut,
+                navBackStackEntry,
+                authResult,
+                navigateToProfile
+            )
         }
     ) {
         UserBottomNavGraph(
             modifier = modifier
                 .padding(it),
-            navController = navController
+            navController = navController,
+            authResult = authResult
         )
     }
 }

@@ -41,4 +41,15 @@
     <string name="first_time_google_signin">Upon your first login, selecting the "Register" option allows us to gather and present your information from Google. This enables you to review and rectify any missing or incorrect details. Additionally, you\'ll need to select a desired package. Once you have reviewed everything, you can proceed to confirm your registration.</string>
     <string name="consent">Consent</string>
     <string name="new_account">New account</string>
+    <string name="profile_image">Profile image</string>
+    <string name="log_out">Log out</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="statistics">Statistics</string>
+    <string name="packageString">Package</string>
+    <string name="first_login">First login</string>
+    <string name="last_login">Last login</string>
+    <string name="times_logged_in">Log ins</string>
+    <string name="images_uploaded">Images uploaded</string>
+    <string name="posts_edited">Posts edited</string>
+    <string name="mb_uploaded">MB uploaded</string>
 </resources>

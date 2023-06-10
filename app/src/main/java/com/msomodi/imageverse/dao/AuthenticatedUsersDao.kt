@@ -15,6 +15,9 @@ interface AuthenticatedUsersDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addAuthenticatedUser(authenticatedUser : AuthenticationResponse)
 
+    @Query("UPDATE authenticated_users_table SET token=:newToken WHERE authenticatedUserId = :authenticatedUserId")
+    suspend fun updateToken(authenticatedUserId: Int, newToken : String)
+
     @Query("DELETE FROM authenticated_users_table")
     suspend fun deleteAuthenticatedUser()
 }

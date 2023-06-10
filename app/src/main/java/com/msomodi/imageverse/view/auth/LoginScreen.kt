@@ -63,11 +63,11 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.common.api.ApiException
 import com.msomodi.imageverse.R
+import com.msomodi.imageverse.model.auth.google.GoogleApiContract
 import com.msomodi.imageverse.model.auth.google.GoogleUser
-import com.msomodi.imageverse.model.auth.response.PackageResponse
 import com.msomodi.imageverse.util.noRippleClickable
-import com.msomodi.imageverse.view.common.RequestState
-import com.msomodi.imageverse.viewmodel.GoogleSignInViewModel
+import com.msomodi.imageverse.model.common.RequestState
+import com.msomodi.imageverse.viewmodel.auth.GoogleSignInViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @Composable
@@ -114,54 +114,47 @@ fun LoginScreen(
 
 
     if(dialogOpen && userExists != null && googleUser != null){
-        AlertDialog(
-            onDismissRequest = {
-                dialogOpen = !dialogOpen
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        dialogOpen = !dialogOpen
-                        onGoogleLogOn(googleUser, userExists)
-                    }
-                ) {
-                    if(userExists){
-                        Text(text = stringResource(R.string.consent))
-                    }else{
+        if(userExists){
+            LaunchedEffect(Unit){
+                onGoogleLogOn(googleUser, userExists)
+            }
+        }else{
+            AlertDialog(
+                onDismissRequest = {
+                    dialogOpen = !dialogOpen
+                },
+                confirmButton = {
+                    TextButton(
+                        onClick = {
+                            dialogOpen = !dialogOpen
+                            onGoogleLogOn(googleUser, userExists)
+                        }
+                    ) {
                         Text(text = stringResource(R.string.go_to_register))
                     }
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        dialogOpen = !dialogOpen
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            dialogOpen = !dialogOpen
+                        }
+                    ) {
+                        Text(text = stringResource(R.string.cancel))
                     }
-                ) {
-                    Text(text = stringResource(R.string.cancel))
-                }
-            },
-            title = {
-                if(userExists){
-                    Text(text = stringResource(R.string.consent))
-                }else{
+                },
+                title = {
                     Text(text = stringResource(R.string.new_account))
-                }
-            },
-            text = {
-                if(userExists){
-                    Text(text = "Do you allow Imageverse to use data from google to log you in?")
-                }else{
+                },
+                text = {
                     Text(text = stringResource(R.string.first_time_google_signin))
-                }
-
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(32.dp),
-            shape = RoundedCornerShape(5.dp),
-            backgroundColor = MaterialTheme.colors.background
-        )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp),
+                shape = RoundedCornerShape(5.dp),
+                backgroundColor = MaterialTheme.colors.background
+            )
+        }
     }
 
     var loadingState by rememberSaveable{

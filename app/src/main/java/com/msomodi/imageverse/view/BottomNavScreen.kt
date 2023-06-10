@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.view.auth.Roles
+import com.msomodi.imageverse.model.common.Roles
 
 sealed class BottomNavScreen(
     val route: String,
@@ -20,12 +20,6 @@ sealed class BottomNavScreen(
         icon = Icons.Default.Article,
         roles = listOf(Roles.ADMIN, Roles.USER, Roles.GUEST)
     )
-    object Profile: BottomNavScreen(
-        route = "profile",
-        title = R.string.profileScreenTitle,
-        icon = Icons.Default.Person,
-        roles = listOf(Roles.ADMIN, Roles.USER)
-    )
     object Search: BottomNavScreen(
         route = "search",
         title = R.string.searchScreenTitle,
@@ -37,5 +31,11 @@ sealed class BottomNavScreen(
         title = R.string.users,
         icon = Icons.Default.People,
         roles = listOf(Roles.ADMIN)
+    )
+    object Profile: BottomNavScreen(
+        route = "profile",
+        title = R.string.profileScreenTitle,
+        icon = Icons.Default.Person,
+        roles = listOf(Roles.ADMIN, Roles.USER)
     )
 }

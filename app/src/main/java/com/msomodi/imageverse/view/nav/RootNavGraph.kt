@@ -10,15 +10,17 @@ import androidx.navigation.compose.composable
 import com.msomodi.imageverse.view.AdminScreen
 import com.msomodi.imageverse.view.GuestScreen
 import com.msomodi.imageverse.view.UserScreen
-import com.msomodi.imageverse.viewmodel.AuthenticationViewModel
-import com.msomodi.imageverse.viewmodel.GoogleSignInViewModel
-import com.msomodi.imageverse.viewmodel.LoginViewModel
-import com.msomodi.imageverse.viewmodel.RegisterViewModel
+import com.msomodi.imageverse.viewmodel.auth.AuthenticationViewModel
+import com.msomodi.imageverse.viewmodel.auth.GoogleSignInViewModel
+import com.msomodi.imageverse.viewmodel.auth.LoginViewModel
+import com.msomodi.imageverse.viewmodel.auth.RegisterViewModel
+import com.msomodi.imageverse.viewmodel.profile.ProfileViewModel
 
 @Composable
 fun RootNavGraph(navController: NavHostController){
     val authenticationViewModel = viewModel<AuthenticationViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
+    val profileViewModel = viewModel<ProfileViewModel>()
     val registerViewModel = viewModel<RegisterViewModel>()
     val googleSignInViewModel = viewModel<GoogleSignInViewModel>()
     val context = LocalContext.current;
@@ -30,7 +32,6 @@ fun RootNavGraph(navController: NavHostController){
     val onLogOut : () -> Unit = {
         authenticationViewModel.removeAuthenticatedUser();
     }
-
 
     if(authResult != null){
         if(authResult.authenticatedUserId != -1 && authResult.user!!.isAdmin)
@@ -45,10 +46,10 @@ fun RootNavGraph(navController: NavHostController){
             route = Graph.ROOT ){
             authNavGraph(navController, loginViewModel, registerViewModel, context, googleSignInViewModel)
             composable(route = Graph.ADMIN){
-                AdminScreen(onLogOut = onLogOut)
+                AdminScreen(onLogOut = onLogOut, authResult = authResult)
             }
             composable(route = Graph.USER){
-                UserScreen(onLogOut = onLogOut)
+                UserScreen(onLogOut = onLogOut, authResult = authResult)
             }
             composable(route = Graph.GUEST){
                 GuestScreen {

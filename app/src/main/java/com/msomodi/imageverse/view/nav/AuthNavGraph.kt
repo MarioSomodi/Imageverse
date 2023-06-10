@@ -1,11 +1,6 @@
 package com.msomodi.imageverse.view.nav
 
 import android.content.Context
-import androidx.compose.material.AlertDialog
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,9 +9,9 @@ import com.msomodi.imageverse.view.AuthScreen
 import com.msomodi.imageverse.view.auth.LoginScreen
 import com.msomodi.imageverse.view.auth.RegisterScreen
 import com.msomodi.imageverse.view.auth.WelcomeScreen
-import com.msomodi.imageverse.viewmodel.GoogleSignInViewModel
-import com.msomodi.imageverse.viewmodel.LoginViewModel
-import com.msomodi.imageverse.viewmodel.RegisterViewModel
+import com.msomodi.imageverse.viewmodel.auth.GoogleSignInViewModel
+import com.msomodi.imageverse.viewmodel.auth.LoginViewModel
+import com.msomodi.imageverse.viewmodel.auth.RegisterViewModel
 
 fun NavGraphBuilder.authNavGraph(
     navController: NavHostController,
