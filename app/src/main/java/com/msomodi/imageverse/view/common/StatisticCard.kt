@@ -28,14 +28,15 @@ fun StatisticsCard(
     modifier : Modifier = Modifier,
     icon : ImageVector,
     statisticValue: String,
-    title : Int
+    title : Int,
+    biggerCard : Boolean = false
 ){
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))
             .shadow(10.dp, RoundedCornerShape(15.dp))
             .background(MaterialTheme.colors.primary)
-            .size(115.dp),
+            .size(if(biggerCard) 140.dp else 115.dp),
         contentAlignment = Alignment.Center
     ){
         Column(

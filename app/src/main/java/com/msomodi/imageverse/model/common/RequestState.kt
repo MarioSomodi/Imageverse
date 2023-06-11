@@ -4,5 +4,5 @@ sealed class RequestState {
     object START : RequestState()
     object LOADING : RequestState()
     object SUCCESS : RequestState()
-    data class FAILURE(val message: String) : RequestState()
+    data class FAILURE(val message: String, val isApiError : Boolean = false) : RequestState()
 }

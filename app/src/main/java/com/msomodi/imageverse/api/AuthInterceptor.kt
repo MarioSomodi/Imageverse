@@ -9,6 +9,11 @@ import com.msomodi.imageverse.model.auth.response.AuthenticationResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -36,6 +41,17 @@ private val _imageverseDatabase: ImageverseDatabase,
         val refreshToken = authResult?.user?.refreshToken
         val request = chain.request()
         if (!token.isNullOrBlank() && !refreshToken.isNullOrBlank() && authResult?.authenticatedUserId != null) {
+            val currentMoment: Instant = Clock.System.now()
+            val datetimeInUtc: LocalDateTime = currentMoment.toLocalDateTime(TimeZone.UTC)
+            //If package was changed and today is the day it is to be valid but user has still not logged out log him out for package change to take effect
+            if(authResult.user?.activePackageId == authResult.user?.previousPackageId &&
+                datetimeInUtc.date >= LocalDateTime.parse(authResult.user?.packageValidFrom?.dropLast(1)+"0").date &&
+                authResult.user?.userStatistics?.totalTimesUserRequestedPackageChange!! > 0
+            ){
+                runBlocking(Dispatchers.IO) {
+                    _imageverseDatabase.authenticatedUsersDao().deleteAuthenticatedUser()
+                }
+            }
             val response = chain.proceed(newRequestWithAccessToken(token, request))
             if (response.code == HttpURLConnection.HTTP_UNAUTHORIZED) {
                 authResult = getAuthenticatedUser()

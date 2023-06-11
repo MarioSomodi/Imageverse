@@ -33,6 +33,7 @@ import com.msomodi.imageverse.ui.theme.ImageverseTheme
 @Composable
 fun PackageCard(
     modifier : Modifier = Modifier,
+    smallerCard : Boolean,
     packageObj : PackageResponse,
     onSelectPackage : (String) -> Unit,
     selectedPackageId : String,
@@ -50,11 +51,11 @@ fun PackageCard(
                 .width(IntrinsicSize.Max)
                 .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(15.dp)
+            verticalArrangement = if(smallerCard) Arrangement.spacedBy(3.dp) else Arrangement.spacedBy(15.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                verticalArrangement = if(smallerCard) Arrangement.spacedBy(3.dp) else Arrangement.spacedBy(15.dp)
             ) {
                 Text(
                     text = packageObj.name,
@@ -132,7 +133,7 @@ fun PackageCardPreview(){
     )
     ImageverseTheme {
         Surface(modifier = Modifier.fillMaxWidth()) {
-            PackageCard(packageObj = packageObj, onSelectPackage = {}, selectedPackageId = packageObj.id)
+            PackageCard(packageObj = packageObj, onSelectPackage = {}, selectedPackageId = packageObj.id, smallerCard = false)
         }
     }
 }

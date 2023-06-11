@@ -473,7 +473,9 @@ fun PackageChoice(
                 PackageCard(
                     packageObj = packageResponse,
                     onSelectPackage = {registerViewModel.onPackageIdChange(it)},
-                    selectedPackageId = registerViewModel.registerState.value.packageId)
+                    selectedPackageId = registerViewModel.registerState.value.packageId,
+                    smallerCard = false
+                )
             }
         }
     }

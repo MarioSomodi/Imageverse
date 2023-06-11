@@ -23,5 +23,6 @@ data class UserResponse (
     val packageValidFrom : String  ,
     val previousPackageId : String,
     val refreshToken : String,
-    val refreshTokenExpiry : String
+    val refreshTokenExpiry : String,
+    val authenticationType : Int
 )

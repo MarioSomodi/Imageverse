@@ -52,4 +52,19 @@
     <string name="images_uploaded">Images uploaded</string>
     <string name="posts_edited">Posts edited</string>
     <string name="mb_uploaded">MB uploaded</string>
+    <string name="update">Update</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="yes">Yes</string>
+    <string name="after_updating_your_info_you_will_be_logged_out_for_security_reasons_do_you_confirm_this_action">After updating you will be logged out for security reasons, do you confirm this action?</string>
+    <string name="edit_basic_info">Edit basic info</string>
+    <string name="change_email">Change email</string>
+    <string name="change_password">Change password</string>
+    <string name="change_package">Change package</string>
+    <string name="new_password">New password</string>
+    <string name="current_password">Current password</string>
+    <string name="package_change_will_be_valid_from_next_day_you_will_be_logged_out_tomorrow_for_security_reasons_as_well_as_for_package_changes_to_take_effect">Package change will be valid from next day, you will be logged out tomorrow for security reasons as well as for package changes to take effect</string>
+    <string name="loading_package_information">Loading package information...</string>
+    <string name="mb_uploaded_daily">MB uploaded daily</string>
+    <string name="images_uploaded_daily">Images uploaded daily</string>
+    <string name="package_change_requested">Package change requested</string>
 </resources>

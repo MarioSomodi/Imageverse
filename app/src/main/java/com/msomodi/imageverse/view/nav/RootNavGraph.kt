@@ -14,13 +14,16 @@ import com.msomodi.imageverse.viewmodel.auth.AuthenticationViewModel
 import com.msomodi.imageverse.viewmodel.auth.GoogleSignInViewModel
 import com.msomodi.imageverse.viewmodel.auth.LoginViewModel
 import com.msomodi.imageverse.viewmodel.auth.RegisterViewModel
-import com.msomodi.imageverse.viewmodel.profile.ProfileViewModel
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
 fun RootNavGraph(navController: NavHostController){
     val authenticationViewModel = viewModel<AuthenticationViewModel>()
     val loginViewModel = viewModel<LoginViewModel>()
-    val profileViewModel = viewModel<ProfileViewModel>()
     val registerViewModel = viewModel<RegisterViewModel>()
     val googleSignInViewModel = viewModel<GoogleSignInViewModel>()
     val context = LocalContext.current;
@@ -38,6 +41,15 @@ fun RootNavGraph(navController: NavHostController){
         {
             startDestination = Graph.ADMIN
         }else if(authResult.authenticatedUserId != -1){
+            val currentMoment: Instant = Clock.System.now()
+            val datetimeInUtc: LocalDateTime = currentMoment.toLocalDateTime(TimeZone.UTC)
+            //If package was changed and today is the day it is to be valid but user has still not logged out log him out for package change to take effect
+            if(authResult.user?.activePackageId == authResult.user?.previousPackageId &&
+                datetimeInUtc.date >= LocalDateTime.parse(authResult.user?.packageValidFrom?.dropLast(1)+"0").date &&
+                authResult.user?.userStatistics?.totalTimesUserRequestedPackageChange!! > 0
+            ){
+               onLogOut()
+            }
             startDestination = Graph.USER
         }
         NavHost(

@@ -1,10 +1,8 @@
-package com.msomodi.imageverse.view.main
+package com.msomodi.imageverse.view.main.userProfile
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.typography
@@ -22,7 +21,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.PunchClock
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.TransitEnterexit
 import androidx.compose.material.icons.outlined.Upload
@@ -37,11 +35,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
@@ -50,7 +46,7 @@ import com.msomodi.imageverse.model.auth.response.AuthenticationResponse
 import com.msomodi.imageverse.model.packages.response.PackageResponse
 import com.msomodi.imageverse.view.common.Chip
 import com.msomodi.imageverse.view.common.StatisticsCard
-import com.msomodi.imageverse.viewmodel.profile.ProfileViewModel
+import com.msomodi.imageverse.viewmodel.userProfile.ProfileViewModel
 import kotlinx.datetime.LocalDateTime
 
 @Composable
@@ -60,6 +56,8 @@ fun ProfileScreen(
         profileViewModel: ProfileViewModel = hiltViewModel()
 ) {
     val user = authResult.user!!
+
+    var currentUpdateScreen by remember { mutableStateOf("")}
 
     LaunchedEffect(Unit){
         profileViewModel.getUsersPackages(user.activePackageId, user.previousPackageId)
@@ -143,9 +141,67 @@ fun ProfileScreen(
             }
         }
         if(editProfileSelected){
+            if(currentUpdateScreen.isBlank()){
+                Column(modifier = modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
+                ) {
+                    Button(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            currentUpdateScreen = "user_info"
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                    ) {
+                        Text(text = stringResource(R.string.edit_basic_info))
+                    }
+                    Button(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            currentUpdateScreen = "user_email"
 
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                    ) {
+                        Text(text = stringResource(R.string.change_email))
+                    }
+                    if(user.authenticationType == 0){
+                        Button(
+                            modifier = modifier
+                                .fillMaxWidth(),
+                            onClick = {
+                                currentUpdateScreen = "user_password"
+                            },
+                            shape = RoundedCornerShape(15.dp),
+                        ) {
+                            Text(text = stringResource(R.string.change_password))
+                        }
+                    }
+                    Button(
+                        modifier = modifier
+                            .fillMaxWidth(),
+                        onClick = {
+                            currentUpdateScreen = "user_package"
+                        },
+                        shape = RoundedCornerShape(15.dp),
+                    ) {
+                        Text(text = stringResource(R.string.change_package))
+                    }
+                }
+            }else{
+                when(currentUpdateScreen){
+                    "user_info" -> EditUserInfoScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                    "user_email" -> ChangeEmailScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                    "user_password" -> ChangePasswordScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                    "user_package" -> ChangePackageScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                }
+            }
         }else if(packageSelected){
-
+            PackageInformationScreen(currentPacakge = activePackage!!, user = user)
         }else{
             Column(modifier = modifier
                 .fillMaxWidth()
@@ -215,3 +271,4 @@ fun ProfileScreen(
         }
     }
 }
+

@@ -67,6 +67,7 @@ import com.msomodi.imageverse.model.auth.google.GoogleApiContract
 import com.msomodi.imageverse.model.auth.google.GoogleUser
 import com.msomodi.imageverse.util.noRippleClickable
 import com.msomodi.imageverse.model.common.RequestState
+import com.msomodi.imageverse.view.common.Dialog
 import com.msomodi.imageverse.viewmodel.auth.GoogleSignInViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -83,15 +84,12 @@ fun LoginScreen(
     context: Context,
     googleSignInViewModel: GoogleSignInViewModel
 ){
-    var dialogOpen : Boolean by remember{
-        mutableStateOf(false)
-    }
+
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = GoogleApiContract()) { task ->
             try {
                 val gsa = task?.getResult(ApiException::class.java)
                 if (gsa != null) {
-                    dialogOpen = !dialogOpen
                     googleSignInViewModel.checkIfUserLoggedInBefore(gsa.id!!)
                     googleSignInViewModel.setGoogleUser(
                         gsa.id!!,
@@ -113,46 +111,18 @@ fun LoginScreen(
     val googleUser : GoogleUser? = googleSignInViewModel.googleUser.observeAsState(initial = null).value
 
 
-    if(dialogOpen && userExists != null && googleUser != null){
+    if(userExists != null && googleUser != null){
         if(userExists){
             LaunchedEffect(Unit){
                 onGoogleLogOn(googleUser, userExists)
             }
         }else{
-            AlertDialog(
-                onDismissRequest = {
-                    dialogOpen = !dialogOpen
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            dialogOpen = !dialogOpen
-                            onGoogleLogOn(googleUser, userExists)
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.go_to_register))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            dialogOpen = !dialogOpen
-                        }
-                    ) {
-                        Text(text = stringResource(R.string.cancel))
-                    }
-                },
-                title = {
-                    Text(text = stringResource(R.string.new_account))
-                },
-                text = {
-                    Text(text = stringResource(R.string.first_time_google_signin))
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp),
-                shape = RoundedCornerShape(5.dp),
-                backgroundColor = MaterialTheme.colors.background
+            Dialog(
+                dialogOpen = true,
+                onConfirm = { onGoogleLogOn(googleUser, userExists) },
+                confirmText = stringResource(R.string.go_to_register),
+                title = stringResource(R.string.new_account),
+                bodyText = stringResource(R.string.first_time_google_signin)
             )
         }
     }
