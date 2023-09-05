@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -37,7 +36,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.model.packages.response.PackageResponse
 import com.msomodi.imageverse.view.common.Dialog
@@ -96,7 +95,7 @@ fun ChangePackageScreen(
         )
     }
 
-    IconButton(modifier = modifier.padding(10.dp), onClick = {onBackPressed()}) {
+    IconButton(modifier = modifier.padding(5.dp), onClick = {onBackPressed()}) {
         Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back arrow")
     }
 
@@ -105,7 +104,7 @@ fun ChangePackageScreen(
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
         if(loadingState){
             Column(

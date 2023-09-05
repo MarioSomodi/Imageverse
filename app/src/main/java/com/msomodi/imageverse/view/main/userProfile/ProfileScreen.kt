@@ -86,13 +86,13 @@ fun ProfileScreen(
         ) {
             Row(
                 modifier = modifier
-                    .padding(start = 10.dp, end = 15.dp, top = 15.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    .padding(start = 5.dp, end = 5.dp, top = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 AsyncImage(
                     modifier = modifier
-                        .size(140.dp)
+                        .size(120.dp)
                         .clip(CircleShape)
                         .border(4.dp, Color.White, CircleShape),
                     model = user.profileImage,

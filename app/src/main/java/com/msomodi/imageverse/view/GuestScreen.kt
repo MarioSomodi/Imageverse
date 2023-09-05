@@ -30,6 +30,7 @@ fun GuestScreen(
         topBar = {
             TopBar(
                 onLogOut,
+                {},
                 navBackStackEntry,
                 null,
                 {}

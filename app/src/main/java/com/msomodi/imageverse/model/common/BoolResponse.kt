@@ -1,4 +1,4 @@
-package com.msomodi.imageverse.model.auth.response
+package com.msomodi.imageverse.model.common
 
 import kotlinx.serialization.Serializable
 

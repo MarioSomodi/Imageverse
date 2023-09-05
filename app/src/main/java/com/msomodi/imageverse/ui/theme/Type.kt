@@ -59,7 +59,6 @@ val Typography = Typography(
     h6 = TextStyle(
         fontWeight = FontWeight.Thin,
         fontSize = 15.sp,
-        color = Color.LightGray
     ),
     subtitle1 = TextStyle(
         fontWeight = FontWeight.Normal,

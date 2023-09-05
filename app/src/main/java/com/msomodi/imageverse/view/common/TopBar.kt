@@ -12,6 +12,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,15 +32,18 @@ import com.msomodi.imageverse.view.BottomNavScreen
 @Composable
 fun TopBar(
     onLogOut: () -> Unit,
+    navigateToAddPost: () -> Unit,
     navBackStackEntry: NavBackStackEntry?,
     authResult: AuthenticationResponse?,
     navigateToProfile : () -> Unit,
     modifier : Modifier = Modifier,
 ){
     var title : Int = R.string.app_name
+    var currentRoute : String = "";
     BottomNavScreen::class.sealedSubclasses.forEach{
         if(navBackStackEntry != null && navBackStackEntry.destination.route == it.objectInstance!!.route){
             title = it.objectInstance!!.title
+            currentRoute = navBackStackEntry.destination.route!!
         }
     }
     
@@ -54,6 +58,13 @@ fun TopBar(
                 textAlign = TextAlign.Center)
         },
         actions = {
+            if(currentRoute == "posts" && authResult != null){
+                TopAppBarActionButton(
+                    imageVector = Icons.Outlined.Add,
+                    description = stringResource(R.string.add_new_post),
+                    onClick = navigateToAddPost
+                )
+            }
             TopAppBarActionButton(
                 imageVector = Icons.Outlined.Logout,
                 description = stringResource(R.string.log_out),
@@ -63,24 +74,24 @@ fun TopBar(
         navigationIcon = {
             if(title == R.string.profileScreenTitle){
                 Box{}
-            }else{
-                Box(modifier = modifier
-                    .padding(8.dp)
-                    .noRippleClickable {
-                        navigateToProfile()
+            }else if (authResult != null){
+                    Box(modifier = modifier
+                        .padding(8.dp)
+                        .noRippleClickable {
+                            navigateToProfile()
+                        }
+                    ){
+                        AsyncImage(
+                            modifier = modifier
+                                .size(40.dp)
+                                .clip(CircleShape)
+                                .border(1.dp, Color.White, CircleShape),
+                            model = authResult.user?.profileImage,
+                            contentDescription = stringResource(R.string.profile_image),
+                        )
                     }
-                ){
-                    AsyncImage(
-                        modifier = modifier
-                            .size(40.dp)
-                            .clip(CircleShape)
-                            .border(1.dp, Color.White, CircleShape),
-                        model = authResult?.user?.profileImage,
-                        contentDescription = stringResource(R.string.profile_image),
-                    )
                 }
             }
-        }
     )
 }
 

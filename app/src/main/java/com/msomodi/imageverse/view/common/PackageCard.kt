@@ -51,11 +51,11 @@ fun PackageCard(
                 .width(IntrinsicSize.Max)
                 .padding(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = if(smallerCard) Arrangement.spacedBy(3.dp) else Arrangement.spacedBy(15.dp)
+            verticalArrangement = if(smallerCard) Arrangement.spacedBy(2.dp) else Arrangement.spacedBy(10.dp)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = if(smallerCard) Arrangement.spacedBy(3.dp) else Arrangement.spacedBy(15.dp)
+                verticalArrangement = if(smallerCard) Arrangement.spacedBy(2.dp) else Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = packageObj.name,
@@ -81,7 +81,7 @@ fun PackageCard(
                 modifier = modifier
                     .width(IntrinsicSize.Max),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(15.dp)
+                verticalArrangement = Arrangement.spacedBy(if(smallerCard) 2.dp else 10.dp)
             ) {
                 Text(
                     text = "Upload images up to ${packageObj.uploadSizeLimit}MB",

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msomodi.imageverse.exception.ErrorUtils
-import com.msomodi.imageverse.model.auth.request.UserInfoUpdateRequest
+import com.msomodi.imageverse.model.user.request.UserInfoUpdateRequest
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.model.exception.ApiException
 import com.msomodi.imageverse.repository.AuthenticationRepository

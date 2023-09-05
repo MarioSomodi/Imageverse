@@ -1,8 +1,5 @@
-package com.msomodi.imageverse.model.auth.response
+package com.msomodi.imageverse.model.user.response
 
-import com.msomodi.imageverse.util.LocalDateTimeAsStringSerializer
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -20,7 +17,7 @@ data class UserResponse (
     val userActionLogIds : Collection<String>,
     val userLimitIds : Collection<String>,
     val userStatistics : UserStatisticsResponse,
-    val packageValidFrom : String  ,
+    val packageValidFrom : String,
     val previousPackageId : String,
     val refreshToken : String,
     val refreshTokenExpiry : String,

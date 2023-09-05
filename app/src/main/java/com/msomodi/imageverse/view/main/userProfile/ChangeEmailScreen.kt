@@ -34,7 +34,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.view.common.Dialog
 import com.msomodi.imageverse.viewmodel.userProfile.ChangeEmailViewModel

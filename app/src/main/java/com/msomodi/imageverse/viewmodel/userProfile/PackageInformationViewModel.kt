@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.msomodi.imageverse.exception.ErrorUtils
-import com.msomodi.imageverse.model.auth.response.UserLimitResponse
+import com.msomodi.imageverse.model.userLimit.response.UserLimitResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.model.exception.ApiException
 import com.msomodi.imageverse.repository.UserLimitRepository

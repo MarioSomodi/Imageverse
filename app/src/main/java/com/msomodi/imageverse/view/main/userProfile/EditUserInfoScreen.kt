@@ -10,15 +10,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.ArrowLeft
 import androidx.compose.material.icons.outlined.Badge
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +35,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.view.common.Dialog
 import com.msomodi.imageverse.viewmodel.userProfile.EditUserInfoViewModel
@@ -96,16 +93,16 @@ fun EditUserInfoScreen(
         )
     }
 
-    IconButton(modifier = modifier.padding(10.dp), onClick = {onBackPressed()}) {
+    IconButton(modifier = modifier.padding(5.dp), onClick = {onBackPressed()}) {
         Icon(imageVector = Icons.Outlined.ArrowBack, contentDescription = "Back arrow")
     }
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(20.dp),
+            .padding(15.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         OutlinedTextField(
             modifier = modifier.fillMaxWidth(),

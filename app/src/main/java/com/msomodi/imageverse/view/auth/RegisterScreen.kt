@@ -166,7 +166,7 @@ fun RegisterScreen(
                         style = MaterialTheme.typography.h1
                     )
                     Row(
-                        modifier = modifier.padding(top = 5.dp),
+                        modifier = modifier.padding(top = 1.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {

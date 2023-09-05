@@ -161,7 +161,7 @@ fun LoginScreen(
         ) {
             Column(
                 verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = modifier.padding(top = 50.dp, start = 20.dp, end = 20.dp)
+                modifier = modifier.padding(top = 30.dp, start = 20.dp, end = 20.dp)
             ){
                 Column(verticalArrangement = Arrangement.Center){
                     Text(

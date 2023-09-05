@@ -1,13 +1,13 @@
 package com.msomodi.imageverse.repository
 
 import com.msomodi.imageverse.api.ImageverseApi
-import com.msomodi.imageverse.model.auth.request.UserEmailUpdateRequest
-import com.msomodi.imageverse.model.auth.request.UserInfoUpdateRequest
-import com.msomodi.imageverse.model.auth.request.UserIsAdminUpdateRequest
-import com.msomodi.imageverse.model.auth.request.UserPackageUpdateRequest
-import com.msomodi.imageverse.model.auth.request.UserPasswordUpdateRequest
-import com.msomodi.imageverse.model.auth.response.BoolResponse
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.user.request.UserEmailUpdateRequest
+import com.msomodi.imageverse.model.user.request.UserInfoUpdateRequest
+import com.msomodi.imageverse.model.user.request.UserIsAdminUpdateRequest
+import com.msomodi.imageverse.model.user.request.UserPackageUpdateRequest
+import com.msomodi.imageverse.model.user.request.UserPasswordUpdateRequest
+import com.msomodi.imageverse.model.common.BoolResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

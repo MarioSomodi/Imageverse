@@ -70,7 +70,7 @@ fun WelcomeScreen(
                     painter = painterResource(id = R.drawable.photo),
                     contentDescription = stringResource(R.string.image),
                     modifier = modifier
-                        .requiredHeight(150.dp)
+                        .requiredHeight(130.dp)
                         .fillMaxWidth(0.50f),
                 )
             }
@@ -82,7 +82,7 @@ fun WelcomeScreen(
                     painter = painterResource(id = R.drawable.photo_feed),
                     contentDescription = stringResource(R.string.image_of_an_photo_feed),
                     modifier = modifier
-                        .requiredHeight(150.dp)
+                        .requiredHeight(130.dp)
                         .fillMaxWidth(0.50f),
                 )
             }
@@ -94,7 +94,7 @@ fun WelcomeScreen(
                     painter = painterResource(id = R.drawable.photo_sharing),
                     contentDescription = stringResource(R.string.image_of_a_person_sharing_a_photo_to_socials),
                     modifier = modifier
-                        .requiredHeight(150.dp)
+                        .requiredHeight(130.dp)
                         .fillMaxWidth(0.50f),
                 )
             }

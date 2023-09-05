@@ -117,4 +117,6 @@ dependencies {
 
     //Google play services
     implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
+    implementation("com.vanniktech:android-image-cropper:4.5.0")
 }

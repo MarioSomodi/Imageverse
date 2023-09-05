@@ -2,6 +2,7 @@ package com.msomodi.imageverse.model.auth.response
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.msomodi.imageverse.model.user.response.UserResponse
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 

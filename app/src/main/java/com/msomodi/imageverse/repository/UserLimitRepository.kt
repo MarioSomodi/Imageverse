@@ -1,7 +1,7 @@
 package com.msomodi.imageverse.repository
 
 import com.msomodi.imageverse.api.ImageverseApi
-import com.msomodi.imageverse.model.auth.response.UserLimitResponse
+import com.msomodi.imageverse.model.userLimit.response.UserLimitResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

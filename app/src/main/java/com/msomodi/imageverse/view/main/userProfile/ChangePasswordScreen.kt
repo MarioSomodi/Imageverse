@@ -16,7 +16,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
@@ -40,7 +39,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.view.common.Dialog
 import com.msomodi.imageverse.viewmodel.userProfile.ChangePasswordViewModel

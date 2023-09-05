@@ -1,5 +1,7 @@
 package com.msomodi.imageverse.view
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
@@ -13,6 +15,7 @@ import com.msomodi.imageverse.view.common.BottomBar
 import com.msomodi.imageverse.view.common.TopBar
 import com.msomodi.imageverse.view.nav.UserBottomNavGraph
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun UserScreen (
     modifier: Modifier = Modifier,
@@ -26,6 +29,10 @@ fun UserScreen (
         navController.navigate(BottomNavScreen.Profile.route)
     }
 
+    val navigateToAddPost : () -> Unit = {
+        navController.navigate(NavScreen.AddPost.route)
+    }
+
     Scaffold(
         bottomBar = {
             BottomBar(
@@ -36,6 +43,7 @@ fun UserScreen (
         topBar = {
             TopBar(
                 onLogOut,
+                navigateToAddPost,
                 navBackStackEntry,
                 authResult,
                 navigateToProfile

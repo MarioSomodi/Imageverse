@@ -67,4 +67,19 @@
     <string name="mb_uploaded_daily">MB uploaded daily</string>
     <string name="images_uploaded_daily">Images uploaded daily</string>
     <string name="package_change_requested">Package change requested</string>
+    <string name="add_new_post">Add new post</string>
+    <string name="pick_image_to_post">Pick image to post</string>
+    <string name="image_to_post">Image to post</string>
+    <string name="description">Description</string>
+    <string name="save_image_as">Save image as</string>
+    <string name="pick_an_image_to_post_to_be_able_to_continue_with_adding_a_new_post">Pick an image to post to be able to continue with adding a new post</string>
+    <string name="loading_existing_hashtags">Loading existing hashtags</string>
+    <string name="hashtags">Hashtags</string>
+    <string name="post">Post</string>
+    <string name="uploading_post">Uploading post</string>
+    <string name="edit_post">Edit post</string>
+    <string name="loading_post">Loading post</string>
+    <string name="updating_post">Updating post</string>
+    <string name="update_post">Update post</string>
+    <string name="delete_post">Delete post</string>
 </resources>

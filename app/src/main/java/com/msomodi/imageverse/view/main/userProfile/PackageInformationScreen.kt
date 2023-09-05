@@ -30,8 +30,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.msomodi.imageverse.R
-import com.msomodi.imageverse.model.auth.response.UserLimitResponse
-import com.msomodi.imageverse.model.auth.response.UserResponse
+import com.msomodi.imageverse.model.userLimit.response.UserLimitResponse
+import com.msomodi.imageverse.model.user.response.UserResponse
 import com.msomodi.imageverse.model.common.RequestState
 import com.msomodi.imageverse.model.packages.response.PackageResponse
 import com.msomodi.imageverse.view.common.StatisticsCard

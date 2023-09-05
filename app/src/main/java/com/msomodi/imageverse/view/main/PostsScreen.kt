@@ -1,41 +1,54 @@
 package com.msomodi.imageverse.view.main
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme.typography
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
+import com.msomodi.imageverse.model.auth.response.AuthenticationResponse
+import com.msomodi.imageverse.view.common.PostCard
+import com.msomodi.imageverse.viewmodel.posts.PostsViewModel
 
+@ExperimentalPagingApi
 @Composable
-fun PostsScreen(modifier: Modifier = Modifier){
-    val state = remember {
-        MutableTransitionState(false).apply { 
-            targetState = true
-        }
-    }
-    
-    AnimatedVisibility(
-        visibleState = state,
-        enter = fadeIn(
-            animationSpec = tween(3000)
-        )
+fun PostsScreen(
+    modifier: Modifier = Modifier,
+    navigateToEditPost : (String) -> Unit,
+    authResult : AuthenticationResponse? = null,
+    postsViewModel: PostsViewModel = hiltViewModel(),
+){
+    val user = authResult?.user
+    val posts = postsViewModel.posts.collectAsLazyPagingItems()
+    val listState = rememberLazyListState(0)
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize(),
+        state = listState,
+        contentPadding = PaddingValues(start = 10.dp, end = 10.dp, top = 10.dp, bottom = 80.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Column(
-            modifier = modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = "Posts", style = typography.h1)
-        }        
+        items(
+            items = posts,
+            key = { post -> post.id }
+        ) { post ->
+            post?.let {
+                PostCard(
+                    user = user,
+                    post = post,
+                    navigateToEditPost = navigateToEditPost,
+                    onPostDelete = {id, dbId ->
+                        postsViewModel.delete(id, dbId)
+                    },
+                    onRefresh = {posts.refresh()}
+                )
+            }
+        }
     }
 }
