@@ -1,5 +1,5 @@
 # Imageverse
-## Project dscription
+## Project description
 Mobile app made with Jetpack compose. Upload your pictures in the imageverse or just see what others are up too...
 ## Technologies used
 * Jetpack Compose
