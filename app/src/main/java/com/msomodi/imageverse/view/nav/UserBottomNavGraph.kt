@@ -2,7 +2,12 @@ package com.msomodi.imageverse.view.nav
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -25,26 +30,60 @@ fun UserBottomNavGraph(
     navController: NavHostController,
     authResult: AuthenticationResponse
 ){
-
+    var state = remember {
+        MutableTransitionState(false).apply {
+            targetState = true
+        }
+    }
     NavHost(navController = navController, startDestination = BottomNavScreen.Posts.route){
         composable(route = BottomNavScreen.Posts.route){
-            PostsScreen(authResult = authResult, navigateToEditPost = {navController.navigate(NavScreen.EditPost.route + "/$it")})
+            AnimatedVisibility(
+                visibleState = state,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                PostsScreen(authResult = authResult, navigateToEditPost = {navController.navigate(NavScreen.EditPost.route + "/$it")})
+            }
         }
         composable(route = BottomNavScreen.Search.route){
-            SearchScreen()
+            AnimatedVisibility(
+                visibleState = state,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                SearchScreen()
+            }
         }
         composable(route = BottomNavScreen.Profile.route){
-            ProfileScreen(authResult)
+            AnimatedVisibility(
+                visibleState = state,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                ProfileScreen(authResult)
+            }
         }
         composable(route = NavScreen.AddPost.route){
-            AddPostScreen(
-                userId = authResult.user?.id,
-                navigateToPostsOnSuccess = {navController.navigate(BottomNavScreen.Posts.route)}
-            )
+            AnimatedVisibility(
+                visibleState = state,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                AddPostScreen(
+                    userId = authResult.user?.id,
+                    navigateToPostsOnSuccess = {navController.navigate(BottomNavScreen.Posts.route)}
+                )
+            }
         }
         composable(route = NavScreen.EditPost.route + "/{id}") { navBackStack ->
             val id = navBackStack.arguments?.getString("id")
-            EditPostScreen(postId = id, navigateToPostsOnSuccess = { navController.navigate(BottomNavScreen.Posts.route)})
+            AnimatedVisibility(
+                visibleState = state,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                EditPostScreen(postId = id, navigateToPostsOnSuccess = { navController.navigate(BottomNavScreen.Posts.route)})
+            }
         }
     }
 }

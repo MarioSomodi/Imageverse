@@ -1,5 +1,7 @@
 package com.msomodi.imageverse.view.common
 
+import androidx.compose.animation.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -11,6 +13,8 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,6 +42,13 @@ fun Chip(
     layoutDirection: LayoutDirection = LayoutDirection.Ltr,
 ) {
     val shape = CircleShape
+
+    val colorAnimatable = remember { Animatable(if (isSelected) selectedColor else Color.Transparent) }
+
+    LaunchedEffect(isSelected) {
+        colorAnimatable.animateTo(if (isSelected) selectedColor else Color.Transparent, animationSpec = tween(300))
+    }
+
     CompositionLocalProvider(LocalLayoutDirection provides layoutDirection) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
@@ -49,7 +60,7 @@ fun Chip(
                     shape = shape
                 )
                 .background(
-                    color = if (isSelected) selectedColor else Transparent,
+                    color = colorAnimatable.value,
                     shape = shape
                 )
                 .clip(shape = shape)

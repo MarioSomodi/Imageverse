@@ -1,5 +1,7 @@
 package com.msomodi.imageverse.view.common
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -88,11 +90,25 @@ fun Step(
     isComplete: Boolean,
     isCurrent: Boolean
 ) {
-    val color = if (isComplete || isCurrent) MaterialTheme.colors.secondary else Color.White
+    val defaultColor = Color.White
+    val completeColor = MaterialTheme.colors.secondary
+    val currentColor = MaterialTheme.colors.secondary
+
+    val color = when {
+        isComplete -> completeColor
+        isCurrent -> currentColor
+        else -> defaultColor
+    }
+
+    val animatedColor = animateColorAsState(
+        targetValue = color,
+        animationSpec = tween(durationMillis = 300)
+    )
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))
-            .background(color)
+            .background(animatedColor.value)
             .height(4.dp)
             .fillMaxWidth()
     )

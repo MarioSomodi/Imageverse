@@ -1,7 +1,14 @@
 package com.msomodi.imageverse.view.auth
 
 import android.content.res.Configuration
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,8 +26,13 @@ import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,6 +47,18 @@ fun WelcomeScreen(
     onLogin: () -> Unit,
     onGuestLogin: () -> Unit
 ) {
+    var isBouncing by remember { mutableStateOf(true) }
+
+    val bounceAnimation = rememberInfiniteTransition()
+    val bounceScale by bounceAnimation.animateFloat(
+        initialValue = 1.0f,
+        targetValue = if (isBouncing) 1.05f else 1.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -71,7 +95,8 @@ fun WelcomeScreen(
                     contentDescription = stringResource(R.string.image),
                     modifier = modifier
                         .requiredHeight(130.dp)
-                        .fillMaxWidth(0.50f),
+                        .fillMaxWidth(0.50f)
+                        .scale(bounceScale),
                 )
             }
             Row(modifier = modifier
@@ -83,7 +108,8 @@ fun WelcomeScreen(
                     contentDescription = stringResource(R.string.image_of_an_photo_feed),
                     modifier = modifier
                         .requiredHeight(130.dp)
-                        .fillMaxWidth(0.50f),
+                        .fillMaxWidth(0.50f)
+                        .scale(bounceScale),
                 )
             }
             Row(modifier = modifier
@@ -95,7 +121,8 @@ fun WelcomeScreen(
                     contentDescription = stringResource(R.string.image_of_a_person_sharing_a_photo_to_socials),
                     modifier = modifier
                         .requiredHeight(130.dp)
-                        .fillMaxWidth(0.50f),
+                        .fillMaxWidth(0.50f)
+                        .scale(bounceScale),
                 )
             }
             Column(

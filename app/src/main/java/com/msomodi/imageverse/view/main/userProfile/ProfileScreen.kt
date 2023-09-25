@@ -1,5 +1,13 @@
 package com.msomodi.imageverse.view.main.userProfile
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Down
+import androidx.compose.animation.AnimatedContentScope.SlideDirection.Companion.Up
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.EaseOut
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.with
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +57,7 @@ import com.msomodi.imageverse.view.common.StatisticsCard
 import com.msomodi.imageverse.viewmodel.userProfile.ProfileViewModel
 import kotlinx.datetime.LocalDateTime
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ProfileScreen(
         authResult : AuthenticationResponse,
@@ -193,12 +202,28 @@ fun ProfileScreen(
                     }
                 }
             }else{
-                when(currentUpdateScreen){
-                    "user_info" -> EditUserInfoScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
-                    "user_email" -> ChangeEmailScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
-                    "user_password" -> ChangePasswordScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
-                    "user_package" -> ChangePackageScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                AnimatedContent(
+                    targetState = currentUpdateScreen,
+                    transitionSpec = {
+                        slideIntoContainer(
+                            animationSpec = tween(300, easing = EaseIn),
+                            towards = Up
+                        ).with(
+                            slideOutOfContainer(
+                                animationSpec = tween(300, easing = EaseOut),
+                                towards = Down
+                            )
+                        )
+                    }) {
+                    targetState ->
+                    when(targetState){
+                        "user_info" -> EditUserInfoScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                        "user_email" -> ChangeEmailScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                        "user_password" -> ChangePasswordScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                        "user_package" -> ChangePackageScreen(user = user, onBackPressed = {currentUpdateScreen = ""})
+                    }
                 }
+
             }
         }else if(packageSelected){
             PackageInformationScreen(currentPacakge = activePackage!!, user = user)

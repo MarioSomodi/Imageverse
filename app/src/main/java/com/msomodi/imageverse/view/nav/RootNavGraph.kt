@@ -1,5 +1,7 @@
 package com.msomodi.imageverse.view.nav
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +22,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun RootNavGraph(navController: NavHostController){
     val authenticationViewModel = viewModel<AuthenticationViewModel>()
